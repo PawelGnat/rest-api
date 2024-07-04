@@ -15,13 +15,14 @@ import { getClients, settleAllClients } from "./db/clients";
 import { getUsers } from "./db/users";
 
 const MONGO_URL = `${process.env.DATABASE_URL}`;
-const ORIGIN_URL = `${process.env.ORIGIN_URL}`;
+const ORIGIN_URL = `${process.env.ORIGIN_URL}` || "http://localhost";
+const ORIGIN_PORT = `${process.env.ORIGIN_PORT}` || 3000;
 
 const app = express();
 
 app.use(
   cors({
-    origin: ORIGIN_URL,
+    origin: `${ORIGIN_URL}:${ORIGIN_PORT}`,
     credentials: true,
   })
 );
@@ -33,7 +34,7 @@ app.use(bodyParser.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ORIGIN_URL,
+    origin: `${ORIGIN_URL}:${ORIGIN_PORT}`,
   },
 });
 
@@ -56,7 +57,7 @@ io.on("connection", (socket) => {
 });
 
 server.listen(8080, () => {
-  console.log("Server is running on http://localhost:8080/");
+  console.log(`Server is running on port:8080`);
 });
 
 mongoose
