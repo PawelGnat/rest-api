@@ -5,13 +5,14 @@ import compression from "compression";
 import http from "http";
 import cors from "cors";
 import mongoose from "mongoose";
+import cron from "node-cron";
 import "dotenv/config";
 import { Server } from "socket.io";
 
-import router from "../router";
+import router from "./router";
 
-import { getClients } from "../db/clients";
-import { getUsers } from "../db/users";
+import { getClients, settleAllClients } from "./db/clients";
+import { getUsers } from "./db/users";
 
 const MONGO_URL = `${process.env.DATABASE_URL}`;
 const ORIGIN_URL = `${process.env.ORIGIN_URL}`;
@@ -82,3 +83,10 @@ db.on("disconnected", () => {
 });
 
 app.use("/", router());
+
+// cron.schedule("* * * * *", async () => {
+//   await settleAllClients();
+//   const clients = await getClients();
+//   io.emit("clients", clients);
+//   console.log("cron runed");
+// });
