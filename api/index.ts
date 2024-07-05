@@ -15,8 +15,7 @@ import { getClients, settleAllClients } from "./db/clients";
 import { getUsers } from "./db/users";
 
 const MONGO_URL = `${process.env.DATABASE_URL}`;
-const ORIGIN_URL = `${process.env.ORIGIN_URL}` || "http://localhost";
-const ORIGIN_PORT = `${process.env.ORIGIN_PORT}` || 3000;
+const ORIGIN_URL = `${process.env.ORIGIN_URL}` || "http://localhost:3000";
 
 const app = express();
 
