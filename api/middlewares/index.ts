@@ -13,9 +13,9 @@ export const isAuthenticated = async (
 ) => {
   try {
     const sessionToken = req.cookies["api_auth_token"];
+    console.log(req.cookies);
 
     if (!sessionToken) {
-      console.log("brak tokena api auth");
       return res.sendStatus(403);
     }
 
@@ -37,10 +37,7 @@ export const isAuthenticated = async (
 
     const session = await getSessionByToken(sessionToken);
 
-    console.log(session, sessionToken);
-
     if (!session) {
-      console.log("brak sesji");
       return res.sendStatus(404);
     }
 

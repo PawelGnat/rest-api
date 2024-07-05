@@ -27,7 +27,7 @@ app.use(
 );
 
 app.use(compression());
-app.use(cookieParser());
+app.use(cookieParser({ sameSite: "none", secure: true }));
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
