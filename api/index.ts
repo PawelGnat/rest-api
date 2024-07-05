@@ -23,8 +23,6 @@ app.use(
   cors({
     origin: `${ORIGIN_URL}`,
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Cookies"],
-    exposedHeaders: ["Authorization", "Cookie", "Cookies"],
   })
 );
 
@@ -85,7 +83,9 @@ db.on("disconnected", () => {
   console.log("Disconnected from MongoDB");
 });
 
-app.use("/", router());
+app.use("/", router(), (req, res) => {
+  res.cookie("api_auth_token", "", { maxAge: 0, sameSite: "none" });
+});
 
 // cron.schedule("* * * * *", async () => {
 //   await settleAllClients();
