@@ -31,6 +31,8 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
+app.set("trust proxy", 1);
+
 app.use(
   session({
     secret: process.env.JWT_SECRET!,
