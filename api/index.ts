@@ -33,6 +33,9 @@ app.use(bodyParser.json());
 
 app.use(
   session({
+    secret: process.env.JWT_SECRET || "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
     cookie: {
       sameSite: "none",
       secure: true,
