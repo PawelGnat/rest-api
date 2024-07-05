@@ -23,11 +23,13 @@ app.use(
   cors({
     origin: `${ORIGIN_URL}`,
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Cookies"],
+    exposedHeaders: ["Authorization", "Cookie", "Cookies"],
   })
 );
 
 app.use(compression());
-app.use(cookieParser({ sameSite: "none", secure: true }));
+app.use(cookieParser());
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
