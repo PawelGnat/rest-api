@@ -31,11 +31,9 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.set("trust proxy", 1);
-
 app.use(
   session({
-    secret: process.env.JWT_SECRET || "secret",
+    secret: process.env.JWT_SECRET!,
     resave: false,
     saveUninitialized: true,
     name: "api_auth_token",
