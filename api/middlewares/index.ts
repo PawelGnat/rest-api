@@ -37,6 +37,8 @@ export const isAuthenticated = async (
 
     const session = await getSessionByToken(sessionToken);
 
+    console.log(session, sessionToken);
+
     if (!session) {
       console.log("brak sesji");
       return res.sendStatus(404);
