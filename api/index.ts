@@ -33,13 +33,15 @@ app.use(bodyParser.json());
 
 app.use(
   session({
-    secret: process.env.JWT_SECRET || "keyboard cat",
+    secret: process.env.JWT_SECRET!,
     resave: false,
     saveUninitialized: true,
+    proxy: true, // Required for Heroku & Digital Ocean (regarding X-Forwarded-For)
+    name: "MyCoolWebAppCookieName", // This needs to be unique per-host.
     cookie: {
+      secure: true, // required for cookies to work on HTTPS
+      httpOnly: false,
       sameSite: "none",
-      secure: true,
-      httpOnly: true,
     },
   })
 );
