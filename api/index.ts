@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import cron from "node-cron";
 import "dotenv/config";
 import { Server } from "socket.io";
+import session from "express-session";
 
 import router from "./router";
 
@@ -29,6 +30,16 @@ app.use(
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
+
+app.use(
+  session({
+    cookie: {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+    },
+  })
+);
 
 const server = http.createServer(app);
 // const io = new Server(server, {
@@ -83,9 +94,7 @@ db.on("disconnected", () => {
   console.log("Disconnected from MongoDB");
 });
 
-app.use("/", router(), (req, res) => {
-  res.cookie("api_auth_token", "", { maxAge: 0, sameSite: "none" });
-});
+app.use("/", router());
 
 // cron.schedule("* * * * *", async () => {
 //   await settleAllClients();
