@@ -32,30 +32,30 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: `${ORIGIN_URL}`,
-    credentials: true,
-  },
-});
+// const io = new Server(server, {
+//   cors: {
+//     origin: `${ORIGIN_URL}`,
+//     credentials: true,
+//   },
+// });
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
 
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
+//   socket.on("disconnect", () => {
+//     console.log("user disconnected");
+//   });
 
-  socket.on("sendClients", async () => {
-    const clients = await getClients();
-    io.emit("clients", clients);
-  });
+//   socket.on("sendClients", async () => {
+//     const clients = await getClients();
+//     io.emit("clients", clients);
+//   });
 
-  socket.on("sendUsers", async () => {
-    const users = await getUsers();
-    io.emit("users", users);
-  });
-});
+//   socket.on("sendUsers", async () => {
+//     const users = await getUsers();
+//     io.emit("users", users);
+//   });
+// });
 
 server.listen(8080, () => {
   console.log(`Server is running on port:8080`);
