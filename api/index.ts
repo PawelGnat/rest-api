@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import cron from "node-cron";
 import "dotenv/config";
 import { Server } from "socket.io";
-import session from "express-session";
 
 import router from "./router";
 
@@ -20,30 +19,14 @@ const ORIGIN_URL = `${process.env.ORIGIN_URL}` || "http://localhost:3000";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: `${ORIGIN_URL}`,
-    credentials: true,
-  })
-);
-
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-app.set("trust proxy", 1);
-
 app.use(
-  session({
-    secret: process.env.JWT_SECRET!,
-    resave: false,
-    saveUninitialized: true,
-    name: "api_auth_token",
-    cookie: {
-      secure: true,
-      httpOnly: false,
-      sameSite: "none",
-    },
+  cors({
+    origin: `${ORIGIN_URL}`,
+    credentials: true,
   })
 );
 
