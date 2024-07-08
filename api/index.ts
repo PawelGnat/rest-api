@@ -19,16 +19,16 @@ const ORIGIN_URL = `${process.env.ORIGIN_URL}` || "http://localhost:3000";
 
 const app = express();
 
-app.use(compression());
-app.use(cookieParser());
-app.use(bodyParser.json());
-
 app.use(
   cors({
     origin: `${ORIGIN_URL}`,
     credentials: true,
   })
 );
+
+app.use(compression());
+app.use(cookieParser());
+app.use(bodyParser.json());
 
 const server = http.createServer(app);
 // const io = new Server(server, {
