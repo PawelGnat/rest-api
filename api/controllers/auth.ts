@@ -54,6 +54,15 @@ export const loginUser = async (
           });
 
           await updateSession(token, user.id);
+
+          res.cookie("api_auth_token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 12 * 60 * 60 * 1000,
+            path: "/",
+          });
+
           return res.status(200).send({ token });
         } else {
           console.error("Invalid token:", error);
@@ -61,6 +70,14 @@ export const loginUser = async (
         }
       }
     }
+
+    res.cookie("api_auth_token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 12 * 60 * 60 * 1000, // 12 hours in milliseconds
+      path: "/",
+    });
 
     return res.status(200).send({ token });
   } catch (error) {
