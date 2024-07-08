@@ -21,17 +21,21 @@ export const loginUser = async (
     const user = await getUserByEmail(email).select("+password");
 
     if (!user) {
-      return res.status(400).json("Invalid email or password");
+      return res
+        .status(400)
+        .json({ error: "Invalid email or password", status: "warning" });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
-      return res.status(400).json("Invalid email or password");
+      return res
+        .status(400)
+        .json({ error: "Invalid email or password", status: "warning" });
     }
 
     if (!process.env.JWT_SECRET) {
-      return res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json("Internal server error");
     }
 
     let token;
@@ -63,10 +67,14 @@ export const loginUser = async (
             path: "/",
           });
 
-          return res.status(200).send({ token });
+          return res
+            .status(200)
+            .send({ token, message: "Login successful", status: "success" });
         } else {
           console.error("Invalid token:", error);
-          return res.status(400).json({ error: "Invalid session token" });
+          return res
+            .status(400)
+            .json({ error: "Invalid session token", status: "danger" });
         }
       }
     }
@@ -79,10 +87,14 @@ export const loginUser = async (
       path: "/",
     });
 
-    return res.status(200).send({ token });
+    return res
+      .status(200)
+      .send({ token, message: "Login successful", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -94,17 +106,21 @@ export const registerUser = async (
     const { name, surname, email, password } = req.body;
 
     if (!name || !surname || !email || !password) {
-      return res.status(400).json("All fields are required");
+      return res
+        .status(400)
+        .json({ error: "All fields are required", status: "warning" });
     }
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      return res.status(400).json("User already exists");
+      return res
+        .status(400)
+        .json({ error: "User already exists", status: "warning" });
     }
 
     if (!process.env.JWT_SECRET) {
-      return res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json("Internal server error");
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -116,10 +132,14 @@ export const registerUser = async (
       password: hashedPassword,
     });
 
-    return res.status(200).json("User registered successfully");
+    return res
+      .status(200)
+      .send({ message: "User registered successfully", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -131,11 +151,11 @@ export const verifyToken = async (
     const sessionToken = req.cookies["api_auth_token"];
 
     if (!sessionToken) {
-      return res.sendStatus(403);
+      return res.status(403).json("Internal server error");
     }
 
     if (!process.env.JWT_SECRET) {
-      return res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json("Internal server error");
     }
 
     jwt.verify(
@@ -158,6 +178,8 @@ export const verifyToken = async (
     );
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };

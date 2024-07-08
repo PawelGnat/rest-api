@@ -22,7 +22,9 @@ export const getAllUsers = async (
     return res.status(200).json(users);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -35,7 +37,9 @@ export const getUser = async (req: express.Request, res: express.Response) => {
     return res.status(200).json(user);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -47,15 +51,18 @@ export const createNewUser = async (
     const { name, surname, email, password } = req.body;
 
     if (!name || !surname || !email || !password) {
-      return res
-        .status(400)
-        .json("Name, surname, email and password is required");
+      return res.status(400).json({
+        error: "Name, surname, email and password is required",
+        status: "warning",
+      });
     }
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      return res.status(400).json("User already exists");
+      return res
+        .status(400)
+        .json({ error: "User already exists", status: "warning" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -67,10 +74,14 @@ export const createNewUser = async (
       password: hashedPassword,
     });
 
-    return res.status(200).json({ user, message: "User created" });
+    return res
+      .status(200)
+      .json({ user, message: "User created", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -83,10 +94,12 @@ export const deleteUser = async (
 
     await deleteUserById(id);
 
-    return res.status(200).json("User deleted");
+    return res.status(200).json({ message: "User deleted", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -98,16 +111,11 @@ export const updateUser = async (
     const { id } = req.params;
     const { name, surname, email } = req.body;
 
-    if (!name) {
-      return res.status(400).json("Name is required");
-    }
-
-    if (!surname) {
-      return res.status(400).json("Surname is required");
-    }
-
-    if (!email) {
-      return res.status(400).json("Email is required");
+    if (!name || !surname || !email) {
+      return res.status(404).json({
+        error: "Name, surname and email is required",
+        status: "warning",
+      });
     }
 
     const user = await updateUserById(id, {
@@ -116,9 +124,13 @@ export const updateUser = async (
       email,
     });
 
-    return res.status(200).json({ user, message: "User updated" });
+    return res
+      .status(200)
+      .json({ user, message: "User updated", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };

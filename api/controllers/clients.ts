@@ -21,7 +21,9 @@ export const getAllClients = async (
     return res.status(200).json(clients);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -37,7 +39,9 @@ export const getClient = async (
     return res.status(200).json(client);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -49,13 +53,17 @@ export const createNewClient = async (
     const { name, address, userId } = req.body;
 
     if (!name || !address) {
-      return res.status(400).json("Name and address is required");
+      return res
+        .status(400)
+        .json({ error: "Name and address is required", status: "warning" });
     }
 
     const existingClient = await getClientByName(name);
 
     if (existingClient) {
-      return res.status(400).json("Client already exists");
+      return res
+        .status(400)
+        .json({ error: "Client already exists", status: "warning" });
     }
 
     let existingUser;
@@ -75,10 +83,14 @@ export const createNewClient = async (
       userId: existingUser?._id.toString() || "",
     });
 
-    return res.status(200).json({ client, message: "Client created" });
+    return res
+      .status(200)
+      .json({ client, message: "Client created", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -91,10 +103,14 @@ export const deleteClient = async (
 
     await deleteClientById(id);
 
-    return res.status(200).json("Client deleted");
+    return res
+      .status(200)
+      .json({ message: "Client deleted", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -107,7 +123,9 @@ export const updateClient = async (
     const { name, address, userId } = req.body;
 
     if (!name || !address) {
-      return res.status(400).json("Name and address is required");
+      return res
+        .status(400)
+        .json({ error: "Name and address is required", status: "warning" });
     }
 
     let existingUser;
@@ -123,7 +141,9 @@ export const updateClient = async (
     const existingClient = await getClientById(id);
 
     if (!existingClient) {
-      return res.status(404).json("Client not found");
+      return res
+        .status(404)
+        .json({ error: "Client not found", status: "warning" });
     }
 
     const client = await updateClientById(id, {
@@ -133,10 +153,14 @@ export const updateClient = async (
       userId: existingUser?._id.toString() || "",
     });
 
-    return res.status(200).json({ client, message: "Client updated" });
+    return res
+      .status(200)
+      .json({ client, message: "Client updated", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
 
@@ -155,14 +179,20 @@ export const settleClient = async (
     const existingClient = await getClientById(id);
 
     if (!existingClient) {
-      return res.status(404).json("Client not found");
+      return res
+        .status(404)
+        .json({ error: "Client not found", status: "warning" });
     }
 
     const client = await settleClientById(id, settled);
 
-    return res.status(200).json({ client, message: "Client updated" });
+    return res
+      .status(200)
+      .json({ client, message: "Client updated", status: "success" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", status: "danger" });
   }
 };
