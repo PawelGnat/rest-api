@@ -75,7 +75,7 @@ export const loginUser = async (
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 12 * 60 * 60 * 1000, // 12 hours in milliseconds
+      maxAge: 12 * 60 * 60 * 1000,
       path: "/",
     });
 
