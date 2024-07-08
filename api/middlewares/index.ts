@@ -16,6 +16,7 @@ export const isAuthenticated = async (
     console.log(req.cookies);
 
     if (!sessionToken) {
+      console.log(sessionToken, "sessionToken");
       return res.sendStatus(403);
     }
 
@@ -73,6 +74,7 @@ export const authorizeEditUserAccess = async (
     const queryUser = await getUserById(id);
 
     if (currentUserId !== queryUser?.id && currentUser.role !== "admin") {
+      console.log("forbidden");
       return res.sendStatus(403);
     }
 
