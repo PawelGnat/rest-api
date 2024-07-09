@@ -59,16 +59,15 @@ export const loginUser = async (
 
           await updateSession(token, user.id);
 
-          res.cookie("api_auth_token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 12 * 60 * 60 * 1000,
-            path: "/",
-          });
-
           return res
             .status(200)
+            .cookie("authorization", token, {
+              httpOnly: true,
+              secure: true,
+              sameSite: "none",
+              maxAge: 12 * 60 * 60 * 1000,
+              path: "/",
+            })
             .send({ token, message: "Login successful", status: "success" });
         } else {
           console.error("Invalid token:", error);
@@ -79,16 +78,15 @@ export const loginUser = async (
       }
     }
 
-    res.cookie("api_auth_token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 12 * 60 * 60 * 1000,
-      path: "/",
-    });
-
     return res
       .status(200)
+      .cookie("authorization", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 12 * 60 * 60 * 1000,
+        path: "/",
+      })
       .send({ token, message: "Login successful", status: "success" });
   } catch (error) {
     console.log(error);
@@ -96,6 +94,18 @@ export const loginUser = async (
       .status(500)
       .json({ error: "Internal server error", status: "danger" });
   }
+};
+
+export const logoutUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  res.send(200).clearCookie("authorization", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  });
 };
 
 export const registerUser = async (
@@ -148,7 +158,7 @@ export const verifyToken = async (
   res: express.Response
 ) => {
   try {
-    const sessionToken = req.cookies["api_auth_token"];
+    const sessionToken = req.cookies["authorization"];
 
     if (!sessionToken) {
       return res.status(403).json("Internal server error");

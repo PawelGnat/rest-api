@@ -12,7 +12,7 @@ export const isAuthenticated = async (
   next: express.NextFunction
 ) => {
   try {
-    const sessionToken = req.cookies["api_auth_token"];
+    const sessionToken = req.cookies["authorization"];
 
     if (!sessionToken) {
       return res.sendStatus(403);
