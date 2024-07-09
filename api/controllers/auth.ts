@@ -100,12 +100,14 @@ export const logoutUser = async (
   req: express.Request,
   res: express.Response
 ) => {
-  res.send(200).clearCookie("authorization", {
+  res.clearCookie("authorization", {
     httpOnly: true,
     secure: true,
     sameSite: "none",
     path: "/",
   });
+
+  res.sendStatus(200);
 };
 
 export const registerUser = async (
