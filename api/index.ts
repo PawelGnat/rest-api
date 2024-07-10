@@ -85,4 +85,3 @@ db.on("disconnected", () => {
 });
 
 app.use("/", router());
-app.use("/cron", cronSettleClients);
