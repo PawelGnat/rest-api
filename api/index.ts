@@ -85,7 +85,7 @@ db.on("disconnected", () => {
 
 app.use("/", router());
 
-cron.schedule("* 0 * * *", async () => {
+cron.schedule("* * * * *", async () => {
   await settleAllClients();
   // const clients = await getClients();
   // io.emit("clients", clients);
