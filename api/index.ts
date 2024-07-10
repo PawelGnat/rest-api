@@ -13,6 +13,7 @@ import router from "./router";
 
 import { getClients, settleAllClients } from "./db/clients";
 import { getUsers } from "./db/users";
+import { cronSettleClients } from "./controllers/cron";
 
 const MONGO_URL = `${process.env.DATABASE_URL}`;
 const ORIGIN_URL = `${process.env.ORIGIN_URL}` || "http://localhost:3000";
@@ -84,10 +85,4 @@ db.on("disconnected", () => {
 });
 
 app.use("/", router());
-
-cron.schedule("* * * * *", async () => {
-  await settleAllClients();
-  // const clients = await getClients();
-  // io.emit("clients", clients);
-  console.log("cron runed");
-});
+app.use("/cron", cronSettleClients);
